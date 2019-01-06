@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>v-on指令</title>
+</head>
+
+<body>
+    <div id="app">
+        <!-- 
+            v-model.lazy : 惰性更新，当鼠标离开输入框，更新model
+            v-model.trim : 删除输入框前后的空格
+            v-model.number : 数字类型,当以数字开头时，model里面的值只取数字部分
+         -->
+        <input type="text" v-model="name">
+        <p>{{name}}</p>
+
+        <input type="text" v-model.number="price">
+        <p>{{price}}</p>
+
+        <textarea v-model="content"></textarea>
+        <p>{{content}}</p>
+
+        <label for="mele">男
+            <input id="mele" v-model="radioVal" type="radio" name="sex" value="male">
+        </label>
+        <label for="female">女
+            <input id="female" v-model="radioVal" type="radio" name="sex" value="female">
+        </label>
+        <p>{{radioVal}}</p>
+
+        <select name="" id="" v-model="selectVal">
+            <option value="1">1text</option>
+            <option value="2">2text</option>
+            <option value="3">3text</option>
+            <option value="4">4text</option>
+        </select>
+        <p>{{selectVal}}</p>
+
+        <select name="" id="" v-model="multiVal" multiple>
+            <option value="1">1text</option>
+            <option value="2">2text</option>
+            <option value="3">3text</option>
+            <option value="4">4text</option>
+        </select>
+        <p>{{multiVal}}</p>
+
+        <div>
+            <label for="a1">狗
+                <input type="checkbox" name="animal" id="a1" value="dog" v-model="checkArr">
+            </label>
+            <label for="a2">猪
+                <input type="checkbox" name="animal" id="a2" value="pig" v-model="checkArr">
+            </label>
+            <label for="a3">猴子
+                <input type="checkbox" name="animal" id="a3" value="monkey" v-model="checkArr">
+            </label>
+            <label for="a4">鸟
+                <input type="checkbox" name="animal" id="a4" value="bird" v-model="checkArr">
+            </label>
+            <p>{{checkArr}}</p>
+        </div>
+
+    </div>
+    <script src="../lib/vue.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>v-on指令</title>
+</head>
+
+<body>
+    <div id="app">
+
+       <button v-on:click="myAlert">别点我</button>      
+       <button @click="myAlert">还点我</button>
+   
+       <form @submit="onSubmit($event)">
+            <!-- 
+                这两种方式可以阻止时间冒泡，防止页面刷新
+                <form @submit.prevent="onSubmit()"></form>
+                <form @submit.stop="onSubmit()"></form>
+             -->
+           <input type="text" 
+            v-on={mouseenter:onMouseEnter,mouseleave:onMouseLeave}
+             @keyup="onKeyup"
+            @keyup.enter="onEnter">
+
+           <input type="submit" value="提交">
+       </form>
+    </div>
+    <script src="../lib/vue.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
