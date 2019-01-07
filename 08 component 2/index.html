@@ -5,22 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>v-bind指令</title>
+    <title>component配置组件</title>
     <style>
-        .active
-        {
-            background-color: #a10;
-            
-        }
+     .likedCls{
+         background-color:green;
+     }
     </style>
 </head>
 
 <body>
-    <div id="app">        
-        <p :class="{active:isActive}">p elements</p>
-        <p><a :class="klass" v-bind:href="url">点我</a></p>
-        <img v-bind:src="img" />        
-
+    <div id="app1">
+        <like-component></like-component>
     </div>
     <script src="../lib/vue.js"></script>
     <script src="js/main.js"></script>
