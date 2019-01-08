@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>slots 插槽</title>
+    <style>
+        .title {
+            border-bottom: 1px solid #000;
+            padding: 5px;
+        }
+
+
+        .content {
+            border-bottom: 1px solid #000;
+            padding: 5px;
+        }
+
+        .my_pannel
+        {
+            border: 1px solid #000;
+            margin-bottom: 5px;
+            width:100px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app1">
+        <pannel>
+            <!-- 
+                在html中，如果想替换模板中的插槽内容，
+                只需要在标签中声明一个slot="title"的属性,
+                这个标签的内容就会自动替换成模板中插槽的内容
+             -->
+            <div slot="title">标题1</div>
+            <div slot="title">标题1.bak</div>
+            <div slot="content">内容1</div>
+            <div slot="footer">脚部1</div>
+        </pannel>
+
+        <pannel>
+            <div slot="title">标题2</div>
+            <div slot="content">内容2</div>
+            <div slot="footer">脚部2</div>
+        </pannel>
+
+        <pannel>
+            <div slot="title">标题3</div>
+            <div slot="content">内容3</div>
+            <!-- <div slot="footer">脚部3</div> -->
+        </pannel>
+    </div>
+
+    <!-- 模板 -->
+    <template id="pannel">
+        <div class="my_pannel">
+            <div class="title">
+                <slot name="title"></slot>
+            </div>
+            <div class="content">
+                <slot name="content"></slot>
+            </div>
+            <div class="footer">
+                <slot name="footer">
+                    这是默认的脚部信息
+                </slot>
+            </div>
+        </div>
+    </template>
+    <script src="../lib/vue.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
