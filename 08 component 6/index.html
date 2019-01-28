@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>component 处理边界情况</title>
+    <script src="../lib/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <input type="week">
+        <my-component1>
+            <my-component2></my-component2>
+        </my-component1>
+    </div>
+
+    <div id="app2">
+        <tree-folder v-for="folder,i in folders " :key="i" :folder="folder"></tree-folder>
+    </div>
+    <script>
+
+        Vue.component("my-component1", {
+            data() {
+                return {
+                    com1Data: "my-component1 里面的数据"
+                }
+            },
+            // provide 选项允许我们指定我们想要提供给后代组件的数据/方法。
+            provide: function () {
+                return {
+                    test1: this.test1,
+                    com1Data: this.com1Data
+                }
+            },
+            template: `<div><slot></slot></div>`,
+            methods: {
+                test() {
+                    console.log("my-component1 里面的test方法哦！！");
+                },
+                test1() {
+                    console.log("my-component1 里面的test1方法哦！！");
+                }
+            }
+        });
+
+        Vue.component("my-component2", {
+            data() {
+                return {
+                    com1Data: "my-component2 里面的数据"
+                }
+            },
+            // 用 inject 选项来接收指定的我们想要添加在这个实例上的属性：
+            inject: ["test1", "com1Data"],
+            template: `<div>
+                <button type="button" @click="test">点我</button>
+                <p>这是 my-component2 组件</p>
+                </div>`,
+            methods: {
+                test() {
+                    this.$parent.test();
+                    this.test1();
+                    console.log(this.com1Data);
+                }
+            }
+        });
+
+        // 文件夹
+        Vue.component("tree-folder", {
+            props: ["folder"],
+            template: `<p>
+                            <span>{{ folder.name }}</span>
+                            <tree-folder-contents :children="folder.children"/>
+                        </p>`
+        });
+
+        // 文件夹里面的资源（包括文件和内部文件夹）
+        Vue.component("tree-folder-contents", {
+            props: ["children"],
+            template: `<ul>
+                            <li v-for="child in children">
+                                <tree-folder v-if="child.children" :folder="child"/>
+                                <span v-else>{{ child.name }}</span>
+                            </li>
+                        </ul>`
+        });
+
+
+
+        var app = new Vue({
+            el: "#app",
+            data: {
+                msg: "some data "
+            },
+            methods: {
+                func() {
+                    console.log("vm中的方法");
+                }
+            },
+            mounted() {
+                // document.getElementById("input").value;
+            }
+        });
+
+        var app = new Vue({
+            el: "#app2",
+            data: {
+                folders: [
+                    {
+                        name: "folder1", children: [
+                            { name: "file1-1" },
+                            { name: "file1-2" },
+                            { name: "file1-3" },
+                            { name: "file1-4" },
+                        ]
+                    },
+
+                    {
+                        name: "folder2", children: [
+                            { name: "file2-1" },
+                            { name: "file2-2" },
+                            { name: "file2-3" },
+                            {
+                                name: "folder2-1", children: [
+                                    { name: "file2-1-1" },
+                                    { name: "file2-1-2" },
+                                    { name: "file2-1-3" },
+                                    { name: "file2-1-4" },
+                                ]
+                            },
+                        ]
+                    },
+                ]
+            }
+        });
+
+
+    </script>
+
+</body>
+
+</html>

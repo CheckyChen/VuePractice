@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>router 动态路由</title>
+    <script src="../lib/vue.js"></script>
+    <script src="../lib/vue-router.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <h3></h3>
+        <p>
+            <router-link to="/user/tome">tome</router-link>
+            <router-link to="/user/france">france</router-link>
+            <router-link to="/user/1/checky/18?test=111">checky</router-link>
+        </p>
+        <p>
+            <!-- 路由的出口 -->
+            <!-- 路由匹配到的组件，最终渲染到该组件里面 -->
+            <router-view></router-view>
+        </p>
+    </div>
+
+    <script>
+        // 1.定义路由组件
+        const User = {
+            template: "<div>User <strong>{{ $route.params.id }}</strong></div>",
+            watch: {
+                '$route'(to, from) {
+                    // 原来的组件实例会被复用。因为两个路由都渲染同个组件，比起销毁再创建，复用则显得更加高效。
+                    // 注意，这也意味着组件的生命周期钩子不会再被调用。
+                    // console.log(to, from);
+                }
+            },
+            beforeRouteUpdate(to, from, next) {
+                // react to route changes...
+                // don't forget to call next()
+                console.log("to", to);
+                console.log("from", from);
+                // next();
+            }
+        };
+
+        // 多段 路径参数
+        const UserInfo = {
+            template: `<div>
+                         <p>主键:{{ $route.params.id }}</p>
+                         <p>姓名:{{ $route.params.name }}</p>
+                         <p>年龄:{{ $route.params.age }}</p>
+                         <p>路径参数:{{ $route.params }}</p>
+                         <p>$route.query参数：{{ $route.query }}</p>
+                         <p>$route.hash参数：{{ $route.hash }}</p>
+                       </div>`};
+
+        // 2.定义路由
+        const routes = [
+            { path: "/user/:id", component: User },
+            { path: "/user/:id/:name/:age", component: UserInfo },
+        ];
+
+        // 3.创建路由实例，然后传入路由 routes 配置      
+        const routers = new VueRouter({
+            routes // (缩写) 相当于 routes: routes
+        });
+
+        // const router = new VueRouter({
+        //     routes // (缩写) 相当于 routes: routes
+        // });
+
+        // 4.创建vue实例，并挂载路由 router 
+        var app = new Vue({
+            el: "#app",
+            router: routers,
+            // router
+        });
+    </script>
+</body>
+
+</html>

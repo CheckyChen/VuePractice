@@ -9,8 +9,8 @@ Vue.component("balance", {
     `,
     data: function () {
         return {
-            isShow : false,
-            balance : 1000000
+            isShow: false,
+            balance: 1000000
         }
     },
     methods: {
@@ -35,7 +35,74 @@ Vue.component("show", {
 });
 
 
+Vue.component("parent-component",{
+    data(){
+        return {
+            msg:"",
+            flag:false
+        }
+    },
+    template:`
+    <div>
+        <child-component @recivemsg="showMsg"></child-component>
+        <span v-show="flag">来自子组件的消息：{{ msg }}</span>
+    </div>
+    `,
+    methods:{
+        showMsg(childMsg){
+            console.log("parent showMsg function ",childMsg);
+            this.msg = childMsg;
+            this.flag=true;
+        }
+    }
+})
 
-new Vue({
-    el: "#app1"
+Vue.component("child-component", {
+    data() {
+        return {
+            msg: ""
+        }
+    },
+    template: `
+    <div>    
+        <input type="text" value="发消息给父组件" v-model="msg"/>
+        <input type="button" value="发送" @click="send"/>
+    </div>
+    `,
+    methods: {
+        send() {
+            console.log("child send the message",this.msg);
+            this.$emit("recivemsg", this.msg);            
+        }
+    }
+});
+
+
+Vue.component('base-checkbox', {
+    // 当没有加 model 属性时，那么点击多选框时data中的 checked 的值是不会改变的
+    model: {
+      prop: 'checked',
+      event: 'change'
+    },
+    props: {
+      checked: Boolean
+    },
+    template: `
+      <input
+        type="checkbox"
+        v-bind:checked="checked"
+        v-on:change="$emit('change', $event.target.checked)"
+      >
+    `
+  })
+
+
+var app = new Vue({
+    el: "#app1",
+    data:{
+        lovingVue:""
+    },
+    computed: {
+         
+    }
 });

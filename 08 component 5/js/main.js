@@ -48,8 +48,30 @@ Vue.component("o-said", {
     },
 });
 
+// 异步组件
+Vue.component('async-example', function (resolve, reject) {
+    setTimeout(function () {
+      // 向 `resolve` 回调传递组件定义
+      resolve({
+        template: '<div>I am async!</div>'
+      })
+    }, 1000)
+  })
+
 
 
 new Vue({
-    el: "#app1"
+    el: "#app1",
+    data:{
+        foo:"hello word!"
+    },
+    created () {
+        // this.$root.foo = "在created函数中被修改了"
+
+        
+    },
+    mounted(){
+        // 当模板挂载完后，光标聚焦到 ref="input" 的输入框中
+        this.$refs.input.focus();
+    }
 });

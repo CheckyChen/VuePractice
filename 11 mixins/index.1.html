@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>mixins 混入</title>
+    <script src="../lib/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+
+    </div>
+
+    <script>
+
+        // 全局混入  一旦使用全局混入对象，将会影响到 所有 之后创建的 Vue 实例。使用恰当时，可以为自定义对象注入处理逻辑。
+        // 谨慎使用全局混入对象，因为会影响到每个单独创建的 Vue 实例 (包括第三方模板)
+        // Vue.mixin({
+        //     created() {
+        //         console.log("我是全局混入啊！！！");
+        //     }
+        // });
+
+        // 大多数情况下，只应当应用于自定义选项，就像下面示例一样。也可以将其用作 Plugins 以避免产生重复应用
+        // 为自定义的选项 'myOption' 注入一个处理器。
+        Vue.mixin({
+            created: function () {
+                var myOption = this.$options.myOption
+                if (myOption) {
+                    console.log(typeof myOption); //===> function
+                    if(typeof myOption === "function")
+                        myOption();
+                }
+            }
+        });
+
+        // 只有加了这个选项的配置的vue实例才会使用 全局混入
+        new Vue({
+            myOption: function () {
+                console.log("saaaa");
+            }
+        })
+
+
+        // 混入和vue实例有相同的挂载函数时，会合并，先调用混入的挂载函数，再调用实例的挂载函数
+        var mixinObj = {
+            created() {
+                console.log("created function in mixins ");
+            }
+        };
+
+        var app = new Vue({
+            el: "#app",
+            mixins: [mixinObj],
+            created() {
+                //先调用混入对象中的 created 的钩子函数，再调用vue实例中的钩子函数
+                console.log("vue instance created function");
+            }
+        });
+
+
+        // 值为对象的选项，例如 methods, components 和 directives，将被混合为同一个对象。两个对象键名冲突时，取组件对象的键值对
+        var mixin1 = {
+            methods: {
+                foo: function () {
+                    console.log('foo')
+                },
+                conflicting: function () {
+                    console.log('from mixin')
+                }
+            }
+        }
+
+        var vm = new Vue({
+            mixins: [mixin1],
+            methods: {
+                bar: function () {
+                    console.log('bar')
+                },
+                conflicting: function () {
+                    console.log('from self')
+                }
+            }
+        });
+
+        vm.conflicting(); // ==> from self
+
+
+
+    </script>
+</body>
+
+</html>

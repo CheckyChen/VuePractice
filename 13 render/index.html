@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>render 渲染</title>
+    <script src="../lib/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <!-- <anchored-heading v-for="i in 6" :key="i" :level="i">这是h{{i}}标题啊！！！</anchored-heading> -->
+
+        <smart-list :items="items"></smart-list>
+    </div>
+
+    <script>
+
+        Vue.component("anchored-heading", {
+            props: {
+                level: {
+                    type: Number,
+                    required: true,
+                }
+            },
+            render: function (createElement, context) {
+                return createElement(
+                    "h" + this.level, //标签名称
+                    this.$slots.default
+                ); // 子元素数组
+            }
+        });
+
+
+        var EmptyList = { template: "<p>EmptyList</p>" };
+        var TableList = { template: "<p>TableList</p>" };
+        var OrderedList = { template: "<p>OrderedList</p>" };
+        var UnorderedList = { template: "<p>UnorderedList</p>" };
+
+        Vue.component('smart-list', {
+            functional: true,
+            props: {
+                items: {
+                    type: Array,
+                    required: true
+                },
+                isOrdered: Boolean
+            },
+            render: function (createElement, context) {
+                function appropriateListComponent() {
+                    var items = context.props.items
+                    console.log(items);
+                    if (items.length === 0) return EmptyList
+                    if (typeof items[0] === 'object') return TableList
+                    if (context.props.isOrdered) return OrderedList
+
+                    return UnorderedList
+                }
+
+                return createElement(
+                    appropriateListComponent(),
+                    context.data,
+                    context.children
+                )
+            }
+        });
+
+        var app = new Vue({
+            el: "#app",
+            data: {
+                // items: [1, 2, 3, 4, 5, 6]
+                items: [
+                    { id: 1, name: 'Checky', age: 18 },
+                    { id: 2, name: 'Tom', age: 22 },
+                    { id: 3, name: 'Jack', age: 33 },
+                    { id: 4, name: 'France', age: 24 },
+                    { id: 5, name: 'Tayler', age: 14 },
+                ]
+            }
+        });
+    </script>
+</body>
+
+</html>

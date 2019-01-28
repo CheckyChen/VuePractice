@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>router 嵌套路由</title>
+    <script src="../lib/vue.js"></script>
+    <script src="../lib/vue-router.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <h3></h3>
+        <p>
+            <router-link to="/user/tome/posts">tome</router-link>
+            <router-link to="/user/france/profile">france</router-link>
+        </p>
+        <p>
+            <!-- 路由的出口 -->
+            <!-- 路由匹配到的组件，最终渲染到该组件里面 -->
+            <router-view></router-view>
+        </p>
+    </div>
+
+    <script>
+        // 1.定义路由组件
+        // 嵌套路由
+        const User = {
+            template: `<div> 
+                            User<strong> {{ $route.params.id }}</strong>
+                            <router-view></router-view>
+                       </div>`,
+        };
+
+        const UserProfile = { template: "<div>{{ $route.params.id }} - UserProfile</div>" };
+        const UserPosts = { template: "<div>{{ $route.params.id }} - UserPosts</div>" };
+
+
+        // 2.定义路由
+        const routes = [
+            {
+                path: "/user/:id",
+                component: User,
+                children: [
+                    {
+                        // 当 /user/:id/profile 匹配成功，
+                        // UserProfile 会被渲染在 User 的 <router-view> 中
+                        // 要注意，以 / 开头的嵌套路径会被当作根路径。 这让你充分的使用嵌套组件而无须设置嵌套的路径。
+                        path: 'profile',
+                        component: UserProfile
+                    },
+                    {
+                        // 当 /user/:id/posts 匹配成功
+                        // UserPosts 会被渲染在 User 的 <router-view> 中
+                        path: 'posts',
+                        component: UserPosts
+                    }
+                ]
+            }
+        ];
+
+        // 3.创建路由实例，然后传入路由 routes 配置      
+        const routers = new VueRouter({
+            routes // (缩写) 相当于 routes: routes
+        });
+
+        // const router = new VueRouter({
+        //     routes // (缩写) 相当于 routes: routes
+        // });
+
+        // 4.创建vue实例，并挂载路由 router 
+        var app = new Vue({
+            el: "#app",
+            router: routers,
+            // router
+        });
+    </script>
+</body>
+
+</html>

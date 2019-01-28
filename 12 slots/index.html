@@ -18,11 +18,10 @@
             padding: 5px;
         }
 
-        .my_pannel
-        {
+        .my_pannel {
             border: 1px solid #000;
             margin-bottom: 5px;
-            width:100px;
+            width: 100px;
         }
     </style>
 </head>
@@ -52,6 +51,33 @@
             <div slot="content">内容3</div>
             <!-- <div slot="footer">脚部3</div> -->
         </pannel>
+
+        <hr>
+        <my-component>
+            <div slot="header">自定义的头部</div>
+            <div slot="content">自定义的内容</div>
+            <div slot="footer">自动以的脚部</div>
+        </my-component>
+
+        <todo-list :todos="todos">
+            <!-- 将 `slotProps` 定义为插槽作用域的名字 -->
+            <template slot-scope="slotProps">
+                <!-- 为待办项自定义一个模板，-->
+                <!-- 通过 `slotProps` 定制每个待办项。-->
+                <span v-if="slotProps.todo.isComplete" >✓</span>
+                {{ slotProps.todo.text }}
+            </template>
+        </todo-list>
+
+        <todo-list :todos="todos">
+            <!-- 将 `slotProps` 定义为插槽作用域的名字 -->
+            <template slot-scope="{todo}">
+                <!-- 为待办项自定义一个模板，-->
+                <!-- 通过 `slotProps` 定制每个待办项。-->
+                <span v-if="todo.isComplete" >✓</span>
+                {{ todo.text }}
+            </template>
+        </todo-list>
     </div>
 
     <!-- 模板 -->

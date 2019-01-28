@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>router 路由组件属性传参</title>
+    <script src="../lib/vue.js"></script>
+    <script src="../lib/vue-router.js"></script>
+</head>
+
+<body>
+    <div id="app" style="height: 1000px;">
+
+        <p>
+            <router-link to="/user/123456">123456</router-link>
+
+            <router-link to="/user/checky">checky</router-link>
+        </p>
+        <p>
+            <!-- 路由的出口 -->
+            <!-- 路由匹配到的组件，最终渲染到该组件里面 -->
+            <router-view></router-view>
+        </p>
+    </div>
+
+    <script>
+
+        // 在组件中使用 $route 会使之与其对应路由形成高度耦合，从而使组件只能在某些特定的 URL 上使用，限制了其灵活性。
+
+        // 1.定义路由组件           
+        // 默认的传参方式是通过 $route.params.id 来获取方式
+        // const User = { template: "<div>User {{ $route.params.id }}</div>" }       
+
+        // 可以配置  通过 props 属性来传递参数
+        const User = {
+            props: ["id"],
+            template: "<div>User {{id}}</div>"
+        }
+
+        // 2.定义路由
+        const routes = [
+            {
+                path: "/user/:id",
+                name: "user",  //给路由起个别名，在跳转的时候，地址就不用写全名了  
+
+                // ① 布尔模式 如果 props 被设置为 true，route.params 将会被设置为组件属性。
+                component: User,
+                props: true,
+
+                // ② 对象模式  如果 props 是一个对象，它会被按原样设置为组件属性。当 props 是静态的时候有用。
+                // components: { default: User },                
+                // props: { default: true },
+
+                // ③ 函数模式 你可以创建一个函数返回 props。这样你便可以将参数转换成另一种类型，将静态值与基于路由的值结合等等。
+                // 如果是这种方式：
+                //       HTML: <router-link to="/user?id=123456">123456</router-link>
+                //       path: "/user?id=123456",
+                // component: User,
+                // props: (route) => ({
+                //     id: route.query.id
+                // }),
+            }
+        ];
+
+        // 3.创建路由实例，然后传入路由 routes 配置      
+        const routers = new VueRouter({
+            routes: routes,
+            //routes // (缩写) 相当于 routes: routes
+            scrollBehavior(to, from, savedPosition) {
+                // return 期望滚动到哪个的位置
+                return { x: 0, y: 500 }
+            }
+        });
+
+        // 4.创建vue实例，并挂载路由 router 
+        var app = new Vue({
+            el: "#app",
+            router: routers,
+            methods: {}
+        });    
+    </script>
+</body>
+
+</html>

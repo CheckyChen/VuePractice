@@ -9,9 +9,14 @@
 </head>
 
 <body>
-    <div id="app1">       
-       <i-said></i-said>
-       <o-said></o-said>
+    <div id="app1">
+        <div>{{foo}}</div>
+        <i-said></i-said>
+        <o-said></o-said>
+
+        <async-example></async-example>
+
+        <input type="text" ref="input" />
     </div>
     <script src="../lib/vue.js"></script>
     <script src="js/main.js"></script>
